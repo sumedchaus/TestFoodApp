@@ -33,6 +33,8 @@ class HomeViewModel @Inject constructor(private val mealRepository: MealReposito
     val categoryListLiveData: LiveData<List<Category>> = _categoryListLiveData
 
 
+
+
     fun getRandomMealList() {
         viewModelScope.launch {
 
@@ -52,7 +54,6 @@ class HomeViewModel @Inject constructor(private val mealRepository: MealReposito
             }
         }
         return Resource.Error(response.message())
-
     }
 
     fun getPopularItems() {
@@ -73,7 +74,6 @@ class HomeViewModel @Inject constructor(private val mealRepository: MealReposito
                     override fun onFailure(call: Call<MealsByCategoryList>, t: Throwable) {
                         Log.d("Error Home Fragment", t.message.toString())
                     }
-
                 })
         }
     }

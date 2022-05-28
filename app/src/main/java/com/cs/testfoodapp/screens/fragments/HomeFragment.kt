@@ -1,5 +1,6 @@
 package com.cs.testfoodapp.screens.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,10 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.mvvmnewsapp.util.Resource
 import com.bumptech.glide.Glide
+import com.cs.foodapplandofcoding.model.Meal
 import com.cs.testfoodapp.databinding.FragmentHomeBinding
+import com.cs.testfoodapp.screens.activity.DetailMealActivity
 import com.cs.testfoodapp.screens.adapters.CategoriesAdapter
 import com.cs.testfoodapp.screens.adapters.MostPopularMealAdapter
 import com.cs.testfoodapp.screens.viewmodel.HomeViewModel
+import com.cs.testfoodapp.utils.Constants.MEAL_ID
+import com.cs.testfoodapp.utils.Constants.MEAL_NAME
+import com.cs.testfoodapp.utils.Constants.MEAL_THUMB
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +35,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var popularItemAdapter: MostPopularMealAdapter
     private lateinit var categoryListAdapter: CategoriesAdapter
+
+    lateinit var randomMeal: Meal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,21 +64,34 @@ class HomeFragment : Fragment() {
                 mainHandler.postDelayed(this, 5000)
             }
         })
+
+        // get randomMeals
+        getRandomMeals()
+        onRandomMealClick()
         //get popular items
         viewModel.getPopularItems()
+        getPopularItemsList()
         preparePopularItemsRecycleView()
+        popularItemClickListener()
         //category List
         viewModel.getCategories()
+        getCategoriesList()
         categoryListItemsRecyclerView()
 
+
+    }
+
+
+    private fun getRandomMeals() {
         viewModel.randomMealList.observe(viewLifecycleOwner, Observer { response ->
 
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
 
+                    this.randomMeal = response.data!!.meals[0]
                     Glide.with(this)
-                        .load(response.data!!.meals[0].strMealThumb)
+                        .load(response.data.meals[0].strMealThumb)
                         .into(binding.imgRandomMeal)
                 }
 
@@ -86,14 +107,24 @@ class HomeFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun onRandomMealClick(){
+        binding.randomMealCard.setOnClickListener {
+            val intent = Intent(activity, DetailMealActivity::class.java)
+            intent.putExtra(MEAL_ID, randomMeal.idMeal)
+            intent.putExtra(MEAL_NAME,randomMeal.strMeal)
+            intent.putExtra(MEAL_THUMB,randomMeal.strMealThumb)
+            startActivity(intent)
+        }
+    }
+
+
+    //get popular Items View
+    private fun getPopularItemsList() {
         //get popular Items
         viewModel.popularItemsLiveData.observe(viewLifecycleOwner, Observer { popularMeals ->
             popularItemAdapter.differ.submitList(popularMeals)
-        })
-
-        viewModel.categoryListLiveData.observe(viewLifecycleOwner, Observer { categoryList ->
-            categoryListAdapter.differ.submitList(categoryList)
-
         })
     }
 
@@ -105,9 +136,31 @@ class HomeFragment : Fragment() {
             adapter = popularItemAdapter
         }
     }
+    //click event on popular items
+    private fun popularItemClickListener() {
+        popularItemAdapter.setOnItemClickListener { meal ->
+            val intent = Intent(activity, DetailMealActivity::class.java)
+            intent.putExtra(MEAL_ID, meal.idMeal)
+            intent.putExtra(MEAL_NAME, meal.strMeal)
+            intent.putExtra(MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+
+        }
+    }
+
+
+    //get category list
+    private fun getCategoriesList() {
+        viewModel.categoryListLiveData.observe(viewLifecycleOwner, Observer { categoryList ->
+            categoryListAdapter.differ.submitList(categoryList)
+
+        })
+    }
+    // create category list recycler view
+
     private fun categoryListItemsRecyclerView() {
         binding.recViewCategories.apply {
-            layoutManager = GridLayoutManager(activity,3)
+            layoutManager = GridLayoutManager(activity, 3)
 
             adapter = categoryListAdapter
         }

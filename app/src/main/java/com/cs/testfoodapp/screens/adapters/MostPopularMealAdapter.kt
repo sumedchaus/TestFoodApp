@@ -36,6 +36,9 @@ class MostPopularMealAdapter : RecyclerView.Adapter<MostPopularMealAdapter.Popul
            )
        )
     }
+    override fun getItemCount(): Int {
+        return differ.currentList.size
+    }
 
     override fun onBindViewHolder(holder: PopularMealViewHolder, position: Int) {
 
@@ -45,10 +48,19 @@ class MostPopularMealAdapter : RecyclerView.Adapter<MostPopularMealAdapter.Popul
                 .load(popularItem.strMealThumb)
                 .into(holder.binding.imgPopularMealItem)
 
+           setOnClickListener {
+               onItemClickListener?.let {
+                   it(popularItem)
+               }
+            }
+
         }
     }
 
-    override fun getItemCount(): Int {
-       return differ.currentList.size
+    private var onItemClickListener : ((MealsByCategory) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (MealsByCategory) -> Unit){
+        onItemClickListener = listener
     }
+
 }
