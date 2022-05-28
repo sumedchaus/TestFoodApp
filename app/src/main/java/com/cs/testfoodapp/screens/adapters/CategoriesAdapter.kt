@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cs.foodapplandofcoding.model.Category
 import com.cs.foodapplandofcoding.model.CategoryList
+import com.cs.foodapplandofcoding.model.MealsByCategory
 import com.cs.testfoodapp.databinding.CategoryItemBinding
 
 class CategoriesAdapter: RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder>() {
@@ -32,6 +33,9 @@ class CategoriesAdapter: RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHo
            )
        )
     }
+    override fun getItemCount(): Int {
+        return differ.currentList.size
+    }
 
     override fun onBindViewHolder(holder: CategoriesViewHolder, position: Int) {
       val categoryItem = differ.currentList[position]
@@ -42,10 +46,16 @@ class CategoriesAdapter: RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHo
 
             holder.binding.tvCategoryName.text = categoryItem.strCategory
 
+            holder.itemView.setOnClickListener {
+                onItemClick!!.invoke(categoryItem)
+            }
         }
-    }
 
-    override fun getItemCount(): Int {
-       return differ.currentList.size
     }
+     var onItemClick: ((Category) -> Unit)? = null
+
+
+
+
+
 }

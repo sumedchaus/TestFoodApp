@@ -17,10 +17,12 @@ import com.androiddevs.mvvmnewsapp.util.Resource
 import com.bumptech.glide.Glide
 import com.cs.foodapplandofcoding.model.Meal
 import com.cs.testfoodapp.databinding.FragmentHomeBinding
+import com.cs.testfoodapp.screens.activity.DetailCategoryMealsActivity
 import com.cs.testfoodapp.screens.activity.DetailMealActivity
 import com.cs.testfoodapp.screens.adapters.CategoriesAdapter
 import com.cs.testfoodapp.screens.adapters.MostPopularMealAdapter
 import com.cs.testfoodapp.screens.viewmodel.HomeViewModel
+import com.cs.testfoodapp.utils.Constants.CATEGORY_NAME
 import com.cs.testfoodapp.utils.Constants.MEAL_ID
 import com.cs.testfoodapp.utils.Constants.MEAL_NAME
 import com.cs.testfoodapp.utils.Constants.MEAL_THUMB
@@ -77,6 +79,7 @@ class HomeFragment : Fragment() {
         viewModel.getCategories()
         getCategoriesList()
         categoryListItemsRecyclerView()
+        onCategoryClick()
 
 
     }
@@ -163,6 +166,15 @@ class HomeFragment : Fragment() {
             layoutManager = GridLayoutManager(activity, 3)
 
             adapter = categoryListAdapter
+        }
+    }
+
+    private fun onCategoryClick(){
+        categoryListAdapter.onItemClick = { category ->
+        val intent = Intent(activity, DetailCategoryMealsActivity::class.java)
+        intent.putExtra(CATEGORY_NAME, category.strCategory)
+        startActivity(intent)
+
         }
     }
 

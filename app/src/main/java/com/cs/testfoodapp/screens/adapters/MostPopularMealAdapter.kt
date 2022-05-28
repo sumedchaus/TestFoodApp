@@ -48,6 +48,7 @@ class MostPopularMealAdapter : RecyclerView.Adapter<MostPopularMealAdapter.Popul
                 .load(popularItem.strMealThumb)
                 .into(holder.binding.imgPopularMealItem)
 
+            // check another method from detailCategoryMealsAdapter also for better understanding
            setOnClickListener {
                onItemClickListener?.let {
                    it(popularItem)

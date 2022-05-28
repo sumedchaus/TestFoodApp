@@ -24,10 +24,10 @@ interface MealApi {
     ): Call<CategoryList>
 
     @GET("api/json/v1/1/filter.php")
-    fun getMealsByCategory(
+    fun getSeparateMealsByCategory(
         @Query("c")
         categoryName:String
-    )
+    ) : Call<MealsByCategoryList>
 
     @GET("api/json/v1/1/lookup.php?")
     fun getMealDetails(
