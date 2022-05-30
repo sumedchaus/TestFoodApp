@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.cs.testfoodapp.R
 import com.cs.testfoodapp.databinding.FragmentHomeBinding
 import com.cs.testfoodapp.databinding.FragmentTestBinding
@@ -45,7 +46,16 @@ class TestFragment : Fragment() {
 
 
         mealName = arguments.mealName
-        binding.instructionDetails.text = mealName
+        mealId = arguments.mealId
+        mealThumb = arguments.mealThumb
+
+        binding.collapsingToolBar.title = mealName
+        binding.collapsingToolBar.setCollapsedTitleTextColor(resources.getColor(R.color.white))
+        binding.collapsingToolBar.setExpandedTitleColor(resources.getColor(R.color.white))
+
+        Glide.with(activity!!)
+            .load(mealThumb)
+            .into(binding.imgMealDetail)
         return binding.root
     }
 

@@ -34,6 +34,12 @@
         <argument
             android:name="mealName"
             app:argType="string" />
+        <argument
+            android:name="mealId"
+            app:argType="string" />
+        <argument
+            android:name="mealThumb"
+            app:argType="string" />
     </fragment>
 
 

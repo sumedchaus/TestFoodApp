@@ -136,7 +136,9 @@ class HomeFragment : Fragment() {
 
             val bundle = Bundle().apply {
                 // use same key as u provide in the nav_graph
+                putString("mealId",randomMeal.idMeal)
                 putString("mealName",randomMeal.strMeal)
+                putString("mealThumb",randomMeal.strMealThumb)
             }
             findNavController().navigate(R.id.action_homeFragment_to_testFragment, bundle)
         }

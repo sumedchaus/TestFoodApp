@@ -2,6 +2,7 @@ package com.cs.testfoodapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -31,6 +32,17 @@ class MainActivity : AppCompatActivity(), Communicator {
         // for bottom navigation view
         val navController = findNavController(R.id.foodNavHostFragment)
         binding.bottomNavigationView.setupWithNavController(navController)
+
+
+        // the test fragment is from nav_graph
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.testFragment) {
+
+                binding.bottomNavigationView.visibility = View.GONE
+            } else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
 
         // to set home fragment as main Fragment
 //        val homeFragment = HomeFragment()
